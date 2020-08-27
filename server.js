@@ -42,9 +42,10 @@ function postNote(arg_request, arg_response){
     let notes = readDB();
 
     // If the request body has the appropriate fields
-    if( arg_request.body["title"] && arg_request.body["text"] ){
+    if( arg_request.body["id"] && arg_request.body["title"] && arg_request.body["text"] ){
         // Grab the information from the request body
         let t_add = {
+            "id": arg_request.body.id,
             "title": arg_request.body.title,
             "text": arg_request.body.text
         };
@@ -57,16 +58,33 @@ function postNote(arg_request, arg_response){
 
         // Send ocnfirmation
         arg_response.send("Note was added: " + JSON.stringify(t_add));
+        return;
     }
     // Else console log error message
     else{
         console.log("ERROR: Response body to POST /api/notes doesn't have the required data" + JSON.stringify(arg_request.body));
+        return;
     }
 }
 
 /** Deletes a note using a passed id */
 function deleteNote(arg_request, arg_response){
+    // Grab DB info
+    let notes = readDB();
 
+    // If the request body has the appropriate fields
+    if( arg_request.params["id"]){
+        const t_index = notes.findIndex( (arg_element) => { return arg_element.id == arg_request.params.id; });
+        notes.splice(t_index,1);
+        fs.writeFileSync(path.join(__dirname, ".\\db\\db.json"), JSON.stringify(notes));
+    }
+    // Else console log error
+    else{
+        console.log("ERROR: Response body to DELETE did not include an ID: " + JSON.stringify(arg_request.body));
+        return;
+    }
+
+    return arg_response.send("Note with id " + arg_request.params["id"] + "was deleted");
 }
 
 
