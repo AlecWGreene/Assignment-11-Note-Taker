@@ -24,6 +24,7 @@ app.use(express.static('public'));
 
 /** Sync reads the db.json and returns the contents */
 function readDB(){
+    console.log(fs.readFileSync(path.join(__dirname, "/db/db.json"), "utf-8", () => {}));
     return JSON.parse(fs.readFileSync(path.join(__dirname, "/db/db.json"), "utf-8", () => {}));
 }
 
@@ -56,7 +57,7 @@ function postNote(arg_request, arg_response){
         notes.push(t_add);
         console.log("Pushed data");
         // Write to DB.json
-        fs.writeFileSync(path.join(__dirname, ".\\db\\db.json"), JSON.stringify(notes));
+        fs.writeFileSync(path.join(__dirname, "/db/db.json"), JSON.stringify(notes));
 
         // Send ocnfirmation
         arg_response.send("Note was added: " + JSON.stringify(t_add));
@@ -78,7 +79,7 @@ function deleteNote(arg_request, arg_response){
     if( arg_request.params["id"]){
         const t_index = notes.findIndex( (arg_element) => { return arg_element.id == arg_request.params.id; });
         notes.splice(t_index,1);
-        fs.writeFileSync(path.join(__dirname, ".\\db\\db.json"), JSON.stringify(notes));
+        fs.writeFileSync(path.join(__dirname, "/db/db.json"), JSON.stringify(notes));
     }
     // Else console log error
     else{
