@@ -24,7 +24,7 @@ app.use(express.static('public'));
 
 /** Sync reads the db.json and returns the contents */
 function readDB(){
-    return JSON.parse(fs.readFileSync(path.join(__dirname, ".\\db\\db.json"), "utf-8", () => {}));
+    return JSON.parse(fs.readFileSync(path.join(__dirname, "/db/db.json"), "utf-8", () => {}));
 }
 
 
