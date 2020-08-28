@@ -38,21 +38,23 @@ function getNotes(arg_request, arg_response){
 
 /** Saves a note to the db.json */
 function postNote(arg_request, arg_response){
+    console.log("Called post method");
     // Grab DB info
     let notes = readDB();
-
+    console.log("Read database");
     // If the request body has the appropriate fields
     if( arg_request.body["id"] && arg_request.body["title"] && arg_request.body["text"] ){
+        console.log("Request had correct arguments");
         // Grab the information from the request body
         let t_add = {
             "id": arg_request.body.id,
             "title": arg_request.body.title,
             "text": arg_request.body.text
         };
-
+        
         // Add a note to the array
         notes.push(t_add);
-
+        console.log("Pushed data");
         // Write to DB.json
         fs.writeFileSync(path.join(__dirname, ".\\db\\db.json"), JSON.stringify(notes));
 
@@ -103,9 +105,7 @@ app.get("/", (arg_request, arg_response) => {
 
 // Note Added Page
 app.get("*", (arg_request, arg_response) => {
-    console.log("Express route accessed");
     arg_response.sendFile(path.join(__dirname, "public/notes.html"));
-    console.log("Sent file");
 });
 
 
