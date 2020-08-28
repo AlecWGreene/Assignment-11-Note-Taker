@@ -103,7 +103,9 @@ app.get("/", (arg_request, arg_response) => {
 
 // Note Added Page
 app.get("*", (arg_request, arg_response) => {
+    console.log("Express route accessed");
     arg_response.sendFile(path.join(__dirname, "public/notes.html"));
+    console.log("Sent file");
 });
 
 
